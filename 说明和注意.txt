@@ -1,0 +1,71 @@
+1、python版本：
+python-2.7.14.amd64.msi
+
+2、selenium
+pycharm 永久激活版
+ThisCrackLicenseId-{
+“licenseId”:”11011”,
+“licenseeName”:”cwt”,
+“assigneeName”:”cwt-zf”,
+“assigneeEmail”:”xx@qq.com”,
+“licenseRestriction”:””,
+“checkConcurrentUse”:false,
+“products”:[
+{“code”:”II”,”paidUpTo”:”2099-12-31”},
+{“code”:”DM”,”paidUpTo”:”2099-12-31”},
+{“code”:”AC”,”paidUpTo”:”2099-12-31”},
+{“code”:”RS0”,”paidUpTo”:”2099-12-31”},
+{“code”:”WS”,”paidUpTo”:”2099-12-31”},
+{“code”:”DPN”,”paidUpTo”:”2099-12-31”},
+{“code”:”RC”,”paidUpTo”:”2099-12-31”},
+{“code”:”PS”,”paidUpTo”:”2099-12-31”},
+{“code”:”DC”,”paidUpTo”:”2099-12-31”},
+{“code”:”RM”,”paidUpTo”:”2099-12-31”},
+{“code”:”CL”,”paidUpTo”:”2099-12-31”},
+{“code”:”PC”,”paidUpTo”:”2099-12-31”}
+],
+“hash”:”2911276/0”,
+“gracePeriodDays”:7,
+“autoProlongated”:false}
+
+安装pycharm后会自动安装pip（http://idea.lanyus.com/ pycharm破解地址），在windows CMD中用已经默认安装的pip安装selenium：
+pip install -U selenium
+
+2018.10.14安装的是selenium3.14.1版本，同时安装了urllib3-1.23
+
+3、selenium使用说明：
+https://pypi.org/project/selenium/
+
+4、其中使用Firefox驱动，需要下载geckodriver.exe并放置在下面目录：
+C:\Python27\Scripts\geckodriver.exe
+
+5、Python环境变量
+在C:\Python27\Lib\site-packages目录下添加一个路径文件，如mypkpath.pth，必须以.pth为后缀，写上你要加入的模块文件所在的目录
+
+6、关键字封装参考robotFramework的写法，地址：
+https://github.com/robotframework/SeleniumLibrary
+
+7、pycharm主题下载：http://www.themesmap.com
+
+一些文章：
+
+selenium基础框架的封装(Python版)
+https://www.cnblogs.com/fightever/p/6867619.html
+
+基于百度网盘的自动化测试方案设计
+https://www.cnblogs.com/fightever/p/7622408.html
+
+python selenium webdriver方法封装（find_element_by）
+https://www.cnblogs.com/111testing/p/6522535.html
+
+关于Selenium Webdriver实现原理的一点思考和分享
+http://www.51testing.com/html/60/n-3726060.html
+
+Selenium WebDriver基础操作教程
+https://blog.csdn.net/tianjing222/article/details/79051221
+
+51Testing的Webdriver专题：
+http://www.51testing.com/zhuanti/webdriver.htm
+
+「UI 测试自动化selenium」汇总
+https://www.cnblogs.com/fnng/p/3157639.html

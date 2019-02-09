@@ -1,0 +1,33 @@
+https://blog.csdn.net/Yl12fh/article/details/81026391
+
+几经波折，终查到原因，windows记事本修改了文件的编码格式，于是用Notepad++打开，修改编码使用UTF-8编码，文件另存，故障排除。
+
+Nginx主要由conf文件夹下nginx.conf文件配置
+    # 配置代理服务器的地址，即Nginx安装的服务器地址、监听端口、默认地址
+    server {
+        #1.监听8099端口
+        listen       8099;
+        #对于server_name,如果需要将多个域名的请求进行反向代理，可以配置多个server_name来满足要求
+        server_name  localhost;
+        #charset koi8-r;
+ 
+        #access_log  logs/host.access.log  main;
+ 
+        location / {
+            # 默认主页目录在nginx安装目录的html子目录
+            root   html ;
+            index  index.html index.htm;
+			#proxy_pass http://mysvr; #跟负载均衡服务器的upstream对应
+        }
+        #访问本地E:/source文件夹 访问路径为localhost:8099/file/a.png 实际访问路径为 E:/source/file/a.png
+        location /file/ {
+            root E:/source/;
+            autoindex on;
+        }
+        #error_page  404              /404.html;
+ 
+        # redirect server error pages to the static page /50x.html
+        # 定义错误提示页面
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
