@@ -1,0 +1,413 @@
+https://www.cnblogs.com/yjbjingcha/p/6918917.html
+
+今有一小型项目，全然自主弄，原来以为非常easy的NTP服务。我给折腾了2个多小时才整撑头（曾经都是运维搞，没太注意，所以这技术的东西。在简单都须要亲尝啊）。这里记录为以后别再浪费时间。
+  
+
+   目标环境，5台linux centos 6.3。 一台作为NTPD服务与外部公共NTP服务同步时间，同一时候作为内网的NTPDserver，其它机器与这台服务做时间同步。
+
+ serverIP	角色 	 说明	同步方式
+ 192.168.1.135 	 NTPD服务	
+ 1、负责与外部公共NTPD服务同步标准时间
+
+ 2、作为内外网络的NTPD服务
+
+NTPD服务平滑同步
+
+ 192.168.1.xxx	 内外NTPclient	 内网设备与192.168.1.135同步时间	NTPD服务平滑同步
+ ……	  内外NTPclient	  内网设备与192.168.1.135同步时间	NTPD服务平滑同步
+  
+
+1、NTP时间同步方式选择
+
+   NTP同步方式在linux下一般两种：使用ntpdate命令直接同步和使用NTPD服务平滑同步。
+
+有什么差别呢，简单说下，免得时间长了。概念又模糊。
+
+   现有一台设备，系统时间是 13:00 , 真实的当前时间(在空中，或许卫星上，这里如果是在准备同步的上级目标NTPserver)是: 12:30  。如果我们使用ntpdate同步（ntpdate -u 目标NTPserverIP），操作系统的时间马上更新为12:30,假如，我们的系统有一个定时应用。是在每天12:40执行。那么实际今天这个的任务已经执行过了（当前时间是13:00嘛），如今被ntpdate改动为12:30，那么意味作10分钟后。又会执行一次任务。这就糟糕了，这个任务仅仅能执行一次的嘛。！
+
+我想你（事实上是我）已经懂了ntpdate时间同步的隐患。当然这个样例有些极端，但的确是有风险的，生产环境我不打算这么干。还是稳妥点好。
+
+所以解决该问题的办法就是时间平滑更改，不会让一个时间点在一天内经历两次。这就是NTPD服务方式平滑同步时间，它每次同步时间的偏移量不会太陡，是慢慢来的（问：怎么来。没有细究，仅仅晓得一次一点的同步，全然同步好须要较长时间，所以一般开启NTPD服务同步前先用ntpdate先手动同步一次）。
+
+ 
+
+2、安装配置
+
+CentOS 6.3系统已经自带了NTPD服务，一般默认是依照了的，假设没有安装，先检查下，然后配置好yum仓库，yum方式安装下就OK。详细例如以下：
+
+# rpm -q ntp
+
+ntp-4.2.4p8-2.el6.x86_64    // 这表示已安装了，假设没有安装，这是空白。
+
+假设没有安装。我们依照下
+
+# yum install ntp
+
+......
+
+按上面的安装方式在内网每台server上都安装好NTP软件包。
+
+完毕后，都须要配置NTP服务为自启动
+
+# chkconfig ntpd on
+
+# chkconfig --list ntpd
+
+ntpd           0:关闭 1:关闭 2:启用 3:启用 4:启用 5:启用 6:关闭
+
+ 
+
+在配置前，先使用ntpdate手动同步下时间，免得本机与外部时间server时间差距太大，让ntpd不能正常同步。
+
+# ntpdate -u 202.112.10.36
+
+22 Dec 16:52:38 ntpdate[6400]: adjust time server 202.112.10.36 offset 0.012135 sec
+
+ 
+
+配置内网NTP-Server(192.168.1.135)
+
+以下主要是配置内网的NPTDserver(192.168.1.135), NTPD服务配置核心就在/etc/ntp.conf文件。配置好了就OK。
+
+网上特别是老外的文章都非常easy，我上当了，妈哟。基础环境不一样，我们得中国特色才行。先上配置文件再说，红色部分是我的改动，其它的是默认。
+
+ 
+
+# For more information about this file, see the man pages
+
+# ntp.conf(5), ntp_acc(5), ntp_auth(5), ntp_clock(5), ntp_misc(5), ntp_mon(5).
+
+ 
+
+driftfile /var/lib/ntp/drift
+
+ 
+
+# Permit time synchronization with our time source, but do not
+
+# permit the source to query or modify the service on this system.
+
+restrict default kod nomodify notrap nopeer noquery
+
+restrict -6 default kod nomodify notrap nopeer noquery
+
+ 
+
+# Permit all access over the loopback interface.  This could
+
+# be tightened as well, but to do so would effect some of
+
+# the administrative functions.
+
+restrict 127.0.0.1
+
+restrict -6 ::1
+
+ 
+
+# Hosts on local network are less restricted.
+
+# 同意内网其它机器同步时间
+
+restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap
+
+ 
+
+# Use public servers from the pool.ntp.org project.
+
+# Please consider joining the pool (http://www.pool.ntp.org/join.html).
+
+# 中国这边最活跃的时间server : http://www.pool.ntp.org/zone/cn
+
+server 210.72.145.44 perfer   # 中国国家受时中心
+
+server 202.112.10.36             # 1.cn.pool.ntp.org
+
+server 59.124.196.83             # 0.asia.pool.ntp.org
+
+ 
+
+#broadcast 192.168.1.255 autokey        # broadcast server
+
+#broadcastclient                        # broadcast client
+
+#broadcast 224.0.1.1 autokey            # multicast server
+
+#multicastclient 224.0.1.1              # multicast client
+
+#manycastserver 239.255.254.254         # manycast server
+
+#manycastclient 239.255.254.254 autokey # manycast client
+
+ 
+
+# allow update time by the upper server 
+
+# 同意上层时间server主动改动本机时间
+
+restrict 210.72.145.44 nomodify notrap noquery
+
+restrict 202.112.10.36 nomodify notrap noquery
+
+restrict 59.124.196.83 nomodify notrap noquery
+
+ 
+
+# Undisciplined Local Clock. This is a fake driver intended for backup
+
+# and when no outside source of synchronized time is available. 
+
+# 外部时间server不可用时，以本地时间作为时间服务
+
+server  127.127.1.0     # local clock
+
+fudge   127.127.1.0 stratum 10
+
+ 
+
+# Enable public key cryptography.
+
+#crypto
+
+ 
+
+includefile /etc/ntp/crypto/pw
+
+ 
+
+# Key file containing the keys and key identifiers used when operating
+
+# with symmetric key cryptography. 
+
+keys /etc/ntp/keys
+
+ 
+
+# Specify the key identifiers which are trusted.
+
+#trustedkey 4 8 42
+
+ 
+
+# Specify the key identifier to use with the ntpdc utility.
+
+#requestkey 8
+
+ 
+
+# Specify the key identifier to use with the ntpq utility.
+
+#controlkey 8
+
+ 
+
+# Enable writing of statistics records.
+
+#statistics clockstats cryptostats loopstats peerstats
+
+配置參数和命令简单说明请參考：http://linux.vbird.org/linux_server/0440ntp.php#server_ntp.conf
+
+ 
+
+配置文件改动完毕，保存退出。启动服务。
+
+# service ntpd start
+
+......
+
+启动后，一般须要5-10分钟左右的时候才干与外部时间server開始同步时间。
+
+能够通过命令查询NTPD服务情况。
+
+ 
+
+查看服务连接和监听
+
+# netstat -tlunp | grep ntp      
+
+udp        0      0 192.168.1.135:123           0.0.0.0:*                               23103/ntpd          
+
+udp        0      0 127.0.0.1:123               0.0.0.0:*                               23103/ntpd          
+
+udp        0      0 0.0.0.0:123                 0.0.0.0:*                               23103/ntpd          
+
+udp        0      0 fe80::6cae:8bff:fe3d:f65:123 :::*                                    23103/ntpd          
+
+udp        0      0 fe80::6eae:8bff:fe3d:f65:123 :::*                                    23103/ntpd          
+
+udp        0      0 ::1:123                     :::*                                    23103/ntpd          
+
+udp        0      0 :::123                      :::*                                    23103/ntpd  
+
+看红色加粗的地方。表示连接和监听已正确，採用UDP方式
+
+ 
+
+ntpq -p 查看网络中的NTPserver，同一时候显示client和每一个server的关系
+
+# ntpq -p
+
+# ntpq -p
+
+     remote           refid      st t when poll reach   delay   offset  jitter
+
+==============================================================================
+
+*202.112.10.36   202.112.10.60    2 u  277  128  314  201.553    9.193  17.068
+
++59.124.196.83   129.6.15.28      2 u   88  128  377   71.153  -25.111  14.004
+
+ LOCAL(0)        .LOCL.          10 l   15   64  377    0.000    0.000   0.000
+
+ 
+
+位置	标志	含义
+符号	*	响应的NTPserver和最精确的server
++	响应这个查询请求的NTPserver
+blank(空格)	没有响应的NTPserver
+标题	remote	响应这个请求的NTPserver的名称
+refid	NTPserver使用的更高一级server的名称
+st	正在响应请求的NTPserver的级别
+when	上一次成功请求之后到如今的秒数
+poll	本地和远程server多少时间进行一次同步。单位秒，在一開始执行NTP的时候这个poll值会比較小，server同步的频率大，能够尽快调整到正确的时间范围。之后poll值会逐渐增大，同步的频率也就会对应减小
+reach	用来測试是否能和server连接，是一个八进制值，每成功连接一次它的值就会添加
+delay	从本地机发送同步要求到ntpserver的往返时间
+offset	主机通过NTP时钟同步与所同步时间源的时间偏移量，单位为毫秒，offset越接近于0，主机和ntpserver的时间越接近
+jitter	统计了在特定个连续的连接数里offset的分布情况。简单地说这个数值的绝对值越小，主机的时间就越精确
+ 
+
+ntpstat 命令查看时间同步状态，这个一般须要5-10分钟后才干成功连接和同步。
+
+所以。server启动后须要稍等下。
+
+刚启动的时候，通常是：
+
+# ntpstat 
+
+unsynchronised
+
+  time server re-starting
+
+   polling server every 64 s
+
+连接并同步后:
+
+synchronised to NTP server (202.112.10.36) at stratum 3 
+
+   time correct to within 275 ms
+
+   polling server every 256 s
+
+ 
+
+OK，内网的NTPD服务已经配置完毕。假设全部正常后。開始配置内网的其它设备与这台server作为时间同步服务。
+
+ 
+
+配置内网NTP-Clients
+
+内网其它设备作为NTP的client配置，相对就比較简单。并且全部设备的配置都同样。
+
+首先须要安装NTPD服务。然后配置为自启动（与NTP-Server全然一样）。然后找当中一台配置/etc/ntp.conf文件，配置完毕验证通过后，复制到其它client机器，直接使用就可以。
+
+# yum install ntp
+
+...
+
+# chkconfig ntp on
+
+# vim /etc/ntp.conf
+
+driftfile /var/lib/ntp/drift
+
+restrict 127.0.0.1
+
+restrict -6 ::1
+
+ 
+
+# 配置时间server为本地的时间server
+
+server 192.168.1.135
+
+ 
+
+restrict 192.168.1.135 nomodify notrap noquery
+
+ 
+
+server  127.127.1.0     # local clock
+
+fudge   127.127.1.0 stratum 10
+
+ 
+
+includefile /etc/ntp/crypto/pw
+
+ 
+
+keys /etc/ntp/keys
+
+ 为了简单。这里仅仅列出了配置项，凝视所有清理了。
+
+ OK，保存退出，请求server前。请先使用ntpdate手动同步下时间
+
+# ntpdate -u 192.168.0.135
+
+22 Dec 17:09:57 ntpdate[6439]: adjust time server 192.168.1.135 offset 0.004882 sec
+
+这里有可能出现同步失败，普通情况下原因都是本地的NTPDserver还没有正常启动起来，一般须要几分钟时间后才干開始同步。
+
+错误推断请參考后面的错误处理。
+
+ 
+
+# service ntpd start
+
+....
+
+启动后，查看同步情况
+
+# ntpq -p
+
+# ntpstat
+
+.....
+
+由于是内网，一般ntpstat非常快就能够同步上。几分钟须要等下.
+
+OK，本机client配置完毕后，使用SCP拷贝/etc/ntp.conf到其它须要同步的client机器，启动NTPD服务就可以。
+
+其它client机器上操作配置例如以下：
+
+#  ntpdate -u 192.168.0.135
+
+22 Dec 17:09:57 ntpdate[6439]: adjust time server 192.168.1.135 offset 0.004882 sec
+
+# scp 192.168.1.xxx:/etc/ntp.conf /etc/ntp.conf
+
+# service ntpd start
+
+ 
+
+ 
+
+3、错误问题处理
+
+用于收集安装，配置和应用中出现的问题
+
+ 
+
+错误1：ntpdate -u ip ->  no server suitable for synchronization found
+
+推断：在ntpclient用ntpdate –d serverIP查看，发现有“Server dropped: strata too high”的错误，而且显示“stratum 16”。
+
+而正常情况下stratum这个值得范围是“0~15”。
+
+原因：NTP server还没有和其自身或者它的server同步上。在ntp server上又一次启动ntp服务后，ntp server自身或者与其server的同步的须要一个时间段，这个过程可能是5分钟，在这个时间之内在client执行ntpdate命令时会产生no server suitable for synchronization found的错误。
+
+处理：等待几分钟后，重试一般解决。
+
+也能够使用命令 ntpq -p查看情况
+
+參考：http://blog.csdn.net/weidan1121/article/details/3953021

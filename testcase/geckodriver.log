@@ -1,0 +1,36 @@
+1549620533881	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\ting\\AppData\\Local\\Temp\\rust_mozprofile.VjDnEpsOp0jD"
+1549620534920	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid host permission: resource://pdf.js/
+1549620534921	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid host permission: about:reader*
+1549620537096	Marionette	INFO	Listening on port 53250
+1549620537338	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/plugins/every_cookie_4644b13.js, line 4: ReferenceError: c is not defined
+JavaScript error: https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=C&json=1&p=3&sid=1442_21095_18559_28329_28413&req=2&csor=1&cb=jQuery110207760070992739102_1549620538910&_=1549620538912, line 1: TypeError: jQuery110207760070992739102_1549620538910 is not a function
+JavaScript error: https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=CW&json=1&p=3&sid=1442_21095_18559_28329_28413&req=2&csor=2&pwd=C&cb=jQuery110207760070992739102_1549620538910&_=1549620538913, line 1: TypeError: jQuery110207760070992739102_1549620538910 is not a function
+JavaScript error: https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=CWT&json=1&p=3&sid=1442_21095_18559_28329_28413&req=2&csor=3&pwd=CW&cb=jQuery110207760070992739102_1549620538910&_=1549620538914, line 1: TypeError: jQuery110207760070992739102_1549620538910 is not a function
+1549620549366	Marionette	INFO	Stopped listening on port 53250
+[Child 4756, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 332
+[Child 475[Parent 11828, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 332
+[Parent 11828, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 332
+[Child 2400, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 332
+[Child 2400
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+[GPU 912, Ch
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+671512688_1549620440294 is not a function
+JavaScript error: https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=seleniu&json=1&p=3&sid=1457_21108_28329_26350_28414_22160&req=2&csor=7&pwd=seleni&cb=jQuery110206929976671512688_1549620440294&_=1549620440302, line 1: TypeError: jQuery110206929976671512688_1549620440294 is not a function
+JavaScript error: https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=selenium&json=1&p=3&sid=1457_21108_28329_26350_28414_22160&req=2&csor=8&pwd=seleniu&cb=jQuery110206929976671512688_1549620440294&_=1549620440303, line 1: TypeError: jQuery110206929976671512688_1549620440294 is not a function
+JavaScript error: https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=selenium%20p&json=1&p=3&sid=1457_21108_28329_26350_28414_22160&req=2&csor=10&pwd=selenium%20&cb=jQuery110206929976671512688_1549620440294&_=1549620440305, line 1: TypeError: jQuery110206929976671512688_1549620440294 is not a function
+JavaScript error: https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=selenium%20&json=1&p=3&sid=1457_21108_28329_26350_28414_22160&req=2&csor=9&pwd=selenium&cb=jQuery110206929976671512688_1549620440294&_=1549620440304, line 1: TypeError: jQuery110206929976671512688_1549620440294 is not a function
+JavaScript error: https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=selenium%20py&json=1&p=3&sid=1457_21108_28329_26350_28414_22160&req=2&csor=11&pwd=selenium%20p&cb=jQuery110206929976671512688_1549620440294&_=1549620440306, line 1: TypeError: jQuery110206929976671512688_1549620440294 is not a function
+JavaScript error: https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=selenium%20pyt&json=1&p=3&sid=1457_21108_28329_26350_28414_22160&req=2&csor=12&pwd=selenium%20py&cb=jQuery110206929976671512688_1549620440294&_=1549620440307, line 1: TypeError: jQuery110206929976671512688_1549620440294 is not a function
+JavaScript error: https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=selenium%20pyth&json=1&p=3&sid=1457_21108_28329_26350_28414_22160&req=2&csor=13&pwd=selenium%20pyt&cb=jQuery110206929976671512688_1549620440294&_=1549620440308, line 1: TypeError: jQuery110206929976671512688_1549620440294 is not a function
+JavaScript error: https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=selenium%20pytho&json=1&p=3&sid=1457_21108_28329_26350_28414_22160&req=2&csor=14&pwd=selenium%20pyth&cb=jQuery110206929976671512688_1549620440294&_=1549620440309, line 1: TypeError: jQuery110206929976671512688_1549620440294 is not a function
+JavaScript error: https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=selenium%20python&json=1&p=3&sid=1457_21108_28329_26350_28414_22160&req=2&csor=15&pwd=selenium%20pytho&cb=jQuery110206929976671512688_1549620440294&_=1549620440310, line 1: TypeError: jQuery110206929976671512688_1549620440294 is not a function
+1549620445951	Marionette	INFO	Stopped listening on port 53176
+[Parent 10896, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 332
+[GPU 3412, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 332
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
