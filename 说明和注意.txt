@@ -47,6 +47,9 @@ https://github.com/robotframework/SeleniumLibrary
 
 7、pycharm主题下载：http://www.themesmap.com
 
+8、参考库：
+https://github.com/robotframework/SeleniumLibrary
+
 一些文章：
 
 selenium基础框架的封装(Python版)
