@@ -50,6 +50,9 @@ https://github.com/robotframework/SeleniumLibrary
 8、参考库：
 https://github.com/robotframework/SeleniumLibrary
 
+9、学习网站：
+http://www.w3school.com.cn
+
 一些文章：
 
 selenium基础框架的封装(Python版)
