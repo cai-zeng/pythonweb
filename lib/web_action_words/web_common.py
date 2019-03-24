@@ -20,3 +20,4 @@ class WebCommon(Selenium):
         self.wait_until_element_enable('xpath', usname_locator, timeout)
 
         self.wait_until_element_enable('xpath', password_locator, timeout)
+
